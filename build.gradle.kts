@@ -1,8 +1,6 @@
 plugins {
     id("java")
-    // 1. Adds Spring Boot capabilities
     id("org.springframework.boot") version "4.0.0"
-    // 2. Manages version numbers for all Spring dependencies automatically
     id("io.spring.dependency-management") version "1.1.5"
 }
 
