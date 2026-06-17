@@ -4,11 +4,11 @@ plugins {
     id("io.spring.dependency-management") version "1.1.5"
 }
 
-group = "org.example"
+group = "org.example.app"
 version = "1.0-SNAPSHOT"
 
-// 3. Explicitly sets the Java version to 25 as requested
 java {
+    // Defines the Java version
     sourceCompatibility = JavaVersion.VERSION_25
 }
 
@@ -17,11 +17,13 @@ repositories {
 }
 
 dependencies {
-    testImplementation(platform("org.junit:junit-bom:6.0.0"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    compileOnly("org.projectlombok:lombok")
+    annotationProcessor("org.projectlombok:lombok")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.wiremock:wiremock-standalone:3.6.0")
 }
 
-tasks.test {
+tasks.withType<Test> {
     useJUnitPlatform()
 }
