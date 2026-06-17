@@ -17,8 +17,5 @@ public class GithubController {
     public String index(){
         List<GithubRepoResponseDTO> response = githubClient.getUserRepositories("Kamczyk09");
         return response.toString();
-
-
     }
-
 }

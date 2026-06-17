@@ -24,8 +24,8 @@ public class GithubClient {
     private final HttpClient httpClient = HttpClient.newHttpClient();
     private final ObjectMapper mapper = new ObjectMapper();
 
-    public List<GithubRepoResponseDTO> getUserRepositories(String username){
-        try{
+    public List<GithubRepoResponseDTO> getUserRepositories(String username) {
+        try {
             String API_URL = BASE_URL + "/users/" + username + "/repos";
             HttpRequest httpRequest = HttpRequest.newBuilder()
                     .uri(URI.create(API_URL))
@@ -34,19 +34,19 @@ public class GithubClient {
                     .build();
             HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() == 404) {
-               log.error("user not found");
+                log.error("user not found");
             } else if (response.statusCode() != 200) {
-               log.error("other error detected");
+                log.error("other error detected");
             }
             return mapper.readValue(
                     response.body(),
                     new TypeReference<>() {
                     }
             );
-            }
-        catch (Exception e){
+        } catch (Exception e) {
             log.error("Failed to fetch repositories for user: " + username, e);
         }
-         return null;
-        }
+        return null;
+    }
+    public List<GithubBranchReponseDTO> getRepoBranchInfo()
 }
