@@ -5,71 +5,31 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import tools.jackson.core.type.TypeReference;
+import org.springframework.stereotype.Repository;
+import org.springframework.web.client.RestClient;
 import tools.jackson.databind.ObjectMapper;
 
-import java.net.URI;
 import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.List;
 
 @Component
 @Slf4j
-@Getter
-@Setter
 public class GithubClient {
     @Value("${base.url}")
     private String BASE_URL;
-    private final HttpClient httpClient = HttpClient.newHttpClient();
     private final ObjectMapper mapper = new ObjectMapper();
+    private final RestClient restClient;
 
-    public List<GithubRepoResponseDTO> getUserRepositories(String username) {
-        try {
-            String API_URL = BASE_URL + "/users/" + username + "/repos";
-            HttpRequest httpRequest = HttpRequest.newBuilder()
-                    .uri(URI.create(API_URL))
-                    .header("Accept", "application/vnd.github.v3+json")
-                    .GET()
-                    .build();
-            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-            if (response.statusCode() == 404) {
-                log.error("user not found");
-            } else if (response.statusCode() != 200) {
-                log.error("other error detected");
-            }
-            return mapper.readValue(
-                    response.body(),
-                    new TypeReference<>() {
-                    }
-            );
-        } catch (Exception e) {
-            log.error("Failed to fetch repositories for user: " + username, e);
-        }
+    GithubClient(RestClient.Builder builder){
+        this.restClient = builder
+                .baseUrl(BASE_URL)
+                .defaultHeader("Accept", "application/vnd.github+json")
+                .build();
+    }
+    public List<GithubRepoResponseDTO> fetchUserRepositories(String username) {
         return null;
     }
-    public List<GithubBranchReponseDTO> getRepoBranchInfo(String username, String repoName) {
-        try {
-            String API_URL = BASE_URL + "/repos/" + username + "/" + repoName + "/branches";
-            HttpRequest httpRequest = HttpRequest.newBuilder()
-                    .uri(URI.create(API_URL))
-                    .header("Accept", "application/vnd.github.v3+json")
-                    .GET()
-                    .build();
-            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-            if (response.statusCode() == 404) {
-                log.error("user not found");
-            } else if (response.statusCode() != 200) {
-                log.error("other error detected");
-            }
-            return mapper.readValue(
-                    response.body(),
-                    new TypeReference<>() {
-                    }
-            );
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
 
+    public void fetchRepoBranches(String username, String repoName){
     }
 }
