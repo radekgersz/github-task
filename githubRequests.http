@@ -2,3 +2,9 @@
 GET https://api.github.com/users/radekgersz/repos
 ###
 GET https://api.github.com/repos/radekgersz/PL-wikipedia-solver/branches
+
+###
+GET localhost:8080//api/users/the-paulbear/repos
+
+###
+GET localhost:8080//api/users/radekgersz1/repos
