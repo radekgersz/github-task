@@ -3,6 +3,7 @@ package org.example.app;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
@@ -29,10 +30,9 @@ public class GithubClient {
                 .get()
                 .uri("/users/{username}/repos", username)
                 .retrieve()
-                .onStatus(HttpStatusCode::is4xxClientError, (request, response) -> {
+                .onStatus(status -> status.isSameCodeAs(HttpStatus.NOT_FOUND), (request, response) -> {
                     throw new UserNotFoundException("User not found: " + username);
-                })
-                .body(REPO_LIST_TYPE);
+                })                .body(REPO_LIST_TYPE);
 
         if (repoDTOS == null) {
             return null;
