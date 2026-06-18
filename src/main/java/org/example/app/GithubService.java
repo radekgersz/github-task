@@ -15,15 +15,12 @@ public class GithubService {
 
     public List<CompleteGithubRepo> getNonForkRepos(String username) {
         List<CompleteGithubRepo> parsedRepos = new ArrayList<>();
-        List<GithubRepoResponseDTO> repos = githubClient.fetchUserRepositories(username);
-        for (GithubRepoResponseDTO repo : repos) {
+        List<GithubRepoDTO> repos = githubClient.fetchUserRepositories(username);
+        for (GithubRepoDTO repo : repos) {
             if (!repo.isFork()) {
                 parsedRepos.add(parseRepo(repo));
             }
         }
         return parsedRepos;
-    }
-    private static CompleteGithubRepo parseRepo(GithubRepoResponseDTO repoResponseDTO){
-        return null;
     }
 }

@@ -1,15 +1,11 @@
 package org.example.app;
 
-import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestClient;
-import tools.jackson.databind.ObjectMapper;
 
-import java.net.http.HttpClient;
 import java.util.List;
 
 @Component
@@ -17,7 +13,6 @@ import java.util.List;
 public class GithubClient {
     @Value("${base.url}")
     private String BASE_URL;
-    private final ObjectMapper mapper = new ObjectMapper();
     private final RestClient restClient;
 
     GithubClient(RestClient.Builder builder){
@@ -26,8 +21,16 @@ public class GithubClient {
                 .defaultHeader("Accept", "application/vnd.github+json")
                 .build();
     }
-    public List<GithubRepoResponseDTO> fetchUserRepositories(String username) {
-        return null;
+    public List<GithubRepository> fetchNonNullRepositories(String username) {
+        List<GithubRepoDTO>
+        return restClient
+                .get()
+                .uri("/users/{username}/repos", username)
+                .retrieve()
+                .onStatus(HttpStatusCode::is4xxClientError, (request, response) -> {
+                    throw new UserNotFoundException("User not found: " + username);
+                })
+
     }
 
     public void fetchRepoBranches(String username, String repoName){

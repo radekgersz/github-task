@@ -2,7 +2,7 @@ package org.example.app;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public record GithubBranchReponseDTO(
+public record GithubBranchDTO(
         @JsonProperty("name")
         String branchName,
         @JsonProperty("commit")
