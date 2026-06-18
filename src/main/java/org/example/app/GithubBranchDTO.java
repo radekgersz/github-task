@@ -6,11 +6,11 @@ public record GithubBranchDTO(
         @JsonProperty("name")
         String branchName,
         @JsonProperty("commit")
-        CommitInfo lastCommitSha
+        CommitInfo CommitInfo
 )
 {
     public record CommitInfo(
             @JsonProperty("sha")
-            String sha
+            String lastSha
     ){}
 }

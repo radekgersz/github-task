@@ -9,18 +9,11 @@ import java.util.List;
 public class GithubService {
     private final GithubClient githubClient;
 
-    public GithubService(GithubClient githubClient) {
+    GithubService(GithubClient githubClient) {
         this.githubClient = githubClient;
     }
 
-    public List<CompleteGithubRepo> getNonForkRepos(String username) {
-        List<CompleteGithubRepo> parsedRepos = new ArrayList<>();
-        List<GithubRepoDTO> repos = githubClient.fetchUserRepositories(username);
-        for (GithubRepoDTO repo : repos) {
-            if (!repo.isFork()) {
-                parsedRepos.add(parseRepo(repo));
-            }
-        }
-        return parsedRepos;
+    List<GithubRepository> getNonForkRepositories(String username) {
+        return githubClient.fetchNonNullRepositories(username);
     }
 }

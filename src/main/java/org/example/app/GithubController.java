@@ -15,6 +15,6 @@ public class GithubController {
     }
     @GetMapping("/")
     public String index(){
-        return null;
+        return githubService.getNonForkRepositories("radekgersz").toString();
     }
 }
