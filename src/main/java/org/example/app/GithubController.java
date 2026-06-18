@@ -13,9 +13,15 @@ public class GithubController {
     public GithubController(GithubClient githubClient){
         this.githubClient = githubClient;
     }
+
     @GetMapping("/")
     public String index(){
         List<GithubRepoResponseDTO> response = githubClient.getUserRepositories("Kamczyk09");
+        return response.toString();
+    }
+    @GetMapping("/test")
+    public String test(){
+        List<GithubBranchReponseDTO> response = githubClient.getRepoBranchInfo("radekgersz","PL-wikipedia-solver");
         return response.toString();
     }
 }

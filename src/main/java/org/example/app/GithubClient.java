@@ -48,5 +48,28 @@ public class GithubClient {
         }
         return null;
     }
-    public List<GithubBranchReponseDTO> getRepoBranchInfo()
+    public List<GithubBranchReponseDTO> getRepoBranchInfo(String username, String repoName) {
+        try {
+            String API_URL = BASE_URL + "/repos/" + username + "/" + repoName + "/branches";
+            HttpRequest httpRequest = HttpRequest.newBuilder()
+                    .uri(URI.create(API_URL))
+                    .header("Accept", "application/vnd.github.v3+json")
+                    .GET()
+                    .build();
+            HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() == 404) {
+                log.error("user not found");
+            } else if (response.statusCode() != 200) {
+                log.error("other error detected");
+            }
+            return mapper.readValue(
+                    response.body(),
+                    new TypeReference<>() {
+                    }
+            );
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 }
